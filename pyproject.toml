@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "pod-gpt"
+version = "0.0.4"
+description = "Package for building podcast search indexes."
+authors = ["James Briggs <james@aurelio.ai>"]
+readme = "README.md"
+packages = [{include = "pod_gpt"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+langchain = "^0.0.125"
+pytube = "^12.1.3"
+torch = "^2.0.0"
+tqdm = "^4.65.0"
+tiktoken = "^0.3.3"
+ffmpeg-python = "^0.2.0"
+pinecone-client = {extras = ["grpc"], version = "^2.2.1"}
+openai = "^0.27.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
