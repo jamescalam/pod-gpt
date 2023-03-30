@@ -13,7 +13,7 @@ class Metadata(BaseModel):
     title: str
     channel_id: str
     published: str
-    url: str
+    source: str
     chunk: int
 
 class Record(BaseModel):
@@ -52,7 +52,7 @@ class Chunker:
                     title=video_record.title,
                     channel_id=video_record.channel_id,
                     published=video_record.published,
-                    url=video_record.url,
+                    source=video_record.source,
                     chunk=i
                 )
             )
@@ -118,6 +118,6 @@ class Indexer:
     
     def __call__(self, video_record: VideoRecord, batch_size: Optional[int] = 100) -> None:
         chunks = self.chunker(video_record)
-        for i in tqdm(range(0, len(chunks), batch_size)):
+        for i in range(0, len(chunks), batch_size):
             i_end = min(i + batch_size, len(chunks))
             self._index(chunks[i:i_end])

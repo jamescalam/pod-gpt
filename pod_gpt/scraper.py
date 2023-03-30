@@ -13,7 +13,7 @@ class VideoRecord(BaseModel):
     channel_id: str
     title: str
     published: str
-    url: str
+    source: str
     transcript: Optional[str] = None
 
 
@@ -21,9 +21,9 @@ class Video:
     def __init__(self, video: VideoRecord):
         self.metadata = video
         try:
-            self.yt = YouTube(self.metadata.url)
+            self.yt = YouTube(self.metadata.source)
         except RegexMatchError:
-            print(f"RegexMatchError for '{self.metadata.url}'. Video object cannot be created.")
+            print(f"RegexMatchError for '{self.metadata.source}'. Video object cannot be created.")
 
     def _download_mp3(self, save_dir: Optional[str] = './temp'):
         itag = None
@@ -98,7 +98,7 @@ class Channel:
                     channel_id=record['snippet']['channelId'],
                     title = record['snippet']['title'],
                     published = record['snippet']['publishedAt'],
-                    url = f"https://youtu.be/{_id}",
+                    source = f"https://youtu.be/{_id}",
                     transcript = None
                 ))
                 # check if we have reached limit
