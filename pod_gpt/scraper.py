@@ -4,17 +4,8 @@ from pytube.exceptions import RegexMatchError
 from tqdm.auto import tqdm
 import requests
 import json
-from pydantic import BaseModel
 from typing import Optional, List, Any
-
-
-class VideoRecord(BaseModel):
-    video_id: str
-    channel_id: str
-    title: str
-    published: str
-    source: str
-    transcript: Optional[str] = None
+from pod_gpt.models import VideoRecord
 
 
 class Video:

@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from typing import List, Optional
 import tiktoken
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -6,21 +5,7 @@ import pinecone
 import openai
 from tqdm.auto import tqdm
 import os
-from .scraper import VideoRecord
-
-
-class Metadata(BaseModel):
-    title: str
-    channel_id: str
-    published: str
-    source: str
-    chunk: int
-
-class Record(BaseModel):
-    id: str
-    text: str
-    metadata: Metadata
-
+from pod_gpt.models import Record, VideoRecord, Metadata
 
 tokenizer = tiktoken.get_encoding('cl100k_base')
 
@@ -84,6 +69,7 @@ class Indexer:
         # initialize everything else...
         self.chunker = Chunker(chunk_size, chunk_overlap)
         self.embedding_model_name = embedding_model_name
+        self.metadata_config = {'indexed': list(Metadata.schema()['properties'].keys())}
         # initialize pinecone connection
         pinecone.init(
             api_key=pinecone_api_key, environment=pinecone_environment
@@ -93,7 +79,8 @@ class Indexer:
         # initialize pinecone index
         if index_name not in pinecone.list_indexes():
             pinecone.create_index(
-                index_name, dimension=self.dimension_map[embedding_model_name]
+                index_name, dimension=self.dimension_map[embedding_model_name],
+                metadata_config=self.metadata_config
             )
         # connect to Pinecone index
         self.index = pinecone.GRPCIndex(index_name)

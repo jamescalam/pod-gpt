@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pod-gpt"
-version = "0.0.5"
+version = "0.0.7"
 description = "Package for building podcast search indexes."
 authors = ["James Briggs <james@aurelio.ai>"]
 readme = "README.md"
