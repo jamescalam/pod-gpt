@@ -61,16 +61,19 @@ class Channel:
         self.channel_id = channel_id
         self.api_key = api_key
 
-    def get_videos_info(self, max_results: Optional[int] = None):
+    def get_videos_info(self, max_results: Optional[int] = None, most_recent_first: Optional[bool] = False):
         """Method to scrape all videos and their metadata from a channel
-
         :param max_results: Maximum number of videos to scrape. If None, all videos are scraped.
+        :param most_recent_first: If True, sort videos by most recent first. If False, sort by relevance. Default is False.
         """
+        most_recent_first = most_recent_first or False
+        order = "date" if most_recent_first else "relevance"
         params = {
             "key": self.api_key,
             "part": "snippet",
             "channelId": self.channel_id,
             "type": "video",
+            "order": order,
             "maxResults": 50
         }
         while True:
