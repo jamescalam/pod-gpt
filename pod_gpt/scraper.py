@@ -14,8 +14,7 @@ class Video:
         try:
             self.yt = YouTube(self.metadata.source)
         except RegexMatchError:
-            print(
-                f"RegexMatchError for '{self.metadata.source}'. Video object cannot be created.")
+            print(f"RegexMatchError for '{self.metadata.source}'. Video object cannot be created.")
 
     def _download_mp3(self, save_dir: Optional[str] = './temp'):
         itag = None
@@ -30,10 +29,8 @@ class Video:
         # initialize mp3 file stream
         stream = self.yt.streams.get_by_itag(itag)
         # download the audio
-        stream.download(output_path=save_dir,
-                        filename=f"{self.metadata.video_id}.mp3")
-        self.temp_file = os.path.join(
-            save_dir, f"{self.metadata.video_id}.mp3")
+        stream.download(output_path=save_dir, filename=f"{self.metadata.video_id}.mp3")
+        self.temp_file = os.path.join(save_dir, f"{self.metadata.video_id}.mp3")
         return self.temp_file
 
     def _transcribe(self, model: Any):
@@ -45,14 +42,14 @@ class Video:
         self.metadata.transcript = text
         # return
         return text
-
+    
     def transcribe_video(self, model: Any):
         filepath = self._download_mp3()
         transcription = self._transcribe(model)
         # delete mp3 file
         os.unlink(filepath)
         return transcription
-
+    
     def __str__(self):
         return f"{dict(self.metadata)}"
 
@@ -93,10 +90,10 @@ class Channel:
                 self.videos.append(VideoRecord(
                     video_id=_id,
                     channel_id=record['snippet']['channelId'],
-                    title=record['snippet']['title'],
-                    published=record['snippet']['publishedAt'],
-                    source=f"https://youtu.be/{_id}",
-                    transcript=None
+                    title = record['snippet']['title'],
+                    published = record['snippet']['publishedAt'],
+                    source = f"https://youtu.be/{_id}",
+                    transcript = None
                 ))
                 # check if we have reached limit
                 if max_results is not None and len(self.videos) >= max_results:
@@ -109,7 +106,7 @@ class Channel:
             next_page_token = res.json()['nextPageToken']
             params['pageToken'] = next_page_token
         return {"num_videos": len(self.videos)}
-
+    
     def transcribe_videos(self, model: Any):
         """Method to transcribe all videos in a channel
         """
